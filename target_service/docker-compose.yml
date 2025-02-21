@@ -1,0 +1,17 @@
+services:
+  target_db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: target_db
+    ports:
+      - "5435:5432"  # Different port to avoid conflict if on same host
+    volumes:
+      - ./target-init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - replication_net
+
+networks:
+  replication_net:
+    external: true
