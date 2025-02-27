@@ -9,7 +9,7 @@ services:
       - "5434:5432"  # Exposed for external access
     volumes:
       - ./source-init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: ["postgres", "-c", "wal_level=logical", "-c", "max_replication_slots=2", "-c", "max_wal_senders=2", "-c", "listen_addresses=*"]
+    command: ["postgres", "-c", "wal_level=logical", "-c", "max_replication_slots=6", "-c", "max_wal_senders=6", "-c", "listen_addresses=*"]
     networks:
       - replication_net
 

@@ -1,0 +1,2 @@
+#!/bin/bash
+docker exec -it source_service-source_db-1 psql -U postgres -d source_db -c "INSERT INTO users (name, email) SELECT 'User_' || generate_series(1, 20000), 'user_' || generate_series(1, 20000) || '@example.com';"

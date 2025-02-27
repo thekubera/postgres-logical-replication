@@ -6,9 +6,38 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: target_db
     ports:
-      - "5435:5432"  # Different port to avoid conflict if on same host
+      - "5435:5432"
     volumes:
       - ./target-init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: ["postgres", "-c", "shared_preload_libraries=dblink"]
+    networks:
+      - replication_net
+      
+  target_db_2:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: target_db_2
+    ports:
+      - "5436:5432"
+    volumes:
+      - ./target-init-2.sql:/docker-entrypoint-initdb.d/init.sql
+    command: ["postgres", "-c", "shared_preload_libraries=dblink"]
+    networks:
+      - replication_net
+
+  target_db_missing:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: target_db_missing
+    ports:
+      - "5437:5432"
+    volumes:
+      - ./target-init-missing.sql:/docker-entrypoint-initdb.d/init.sql
+    command: ["postgres", "-c", "shared_preload_libraries=dblink"]
     networks:
       - replication_net
 

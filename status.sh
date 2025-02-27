@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "Replication Status at $(date):"
+echo "Publisher Slots:"
+docker exec -it source_service-source_db-1 psql -U postgres -d source_db -c "SELECT slot_name, active, wal_status FROM pg_replication_slots;"
+echo "Subscriber One Status (target_db):"
+docker exec -it target_service-target_db-1 psql -U postgres -d target_db -c "SELECT subname, received_lsn, latest_end_lsn FROM pg_stat_subscription;"
+echo "Subscriber Two Status (target_db_2):"
+docker exec -it target_service-target_db_2-1 psql -U postgres -d target_db_2 -c "SELECT subname, received_lsn, latest_end_lsn FROM pg_stat_subscription;"
+echo "Subscriber Three Status (target_db_missing):"
+docker exec -it target_service-target_db_missing-1 psql -U postgres -d target_db_missing -c "SELECT subname, received_lsn, latest_end_lsn FROM pg_stat_subscription;"
